@@ -5,11 +5,11 @@ const ProjectSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  description: {
+  about: {
     type: String,
     require: true,
   },
-  user: {
+  responsible: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     require: true,
@@ -17,10 +17,17 @@ const ProjectSchema = new mongoose.Schema({
   tasks: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Task',
+    require: true,
   }],
   createdAt: {
     type: Date,
     default: Date.now,
+  },
+  finishedAt: {
+    type: Date,
+  },
+  objectives: {
+    type: String,
   },
 });
 

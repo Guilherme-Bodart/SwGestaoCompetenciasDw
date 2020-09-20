@@ -24,6 +24,16 @@ const UserSchema = new mongoose.Schema({
         type:Date,
         default:Date.now
     },
+    occupation: {
+        type: String,
+        require: true,
+        lowercase: true,
+    },
+    isAdmin: {
+        type: Boolean,
+        require: true,
+        default: false,
+    },
 })
 
 UserSchema.pre('save', async function(next) {
