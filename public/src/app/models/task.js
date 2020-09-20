@@ -15,10 +15,6 @@ const TaskSchema = new mongoose.Schema({
     ref: 'User',
     require: true,
   },
-  team:[{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-  }],
   completed: {
     type: Boolean,
     require: true,
@@ -31,7 +27,7 @@ const TaskSchema = new mongoose.Schema({
   finishedAt: {
     type: Date,
   },
-  tecnology: {
+  technology: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Tecnology',
     require: true, //talvez nem toda tarefa do projeto envolva tecnologia, como a parte de negócio, reuniões e etc

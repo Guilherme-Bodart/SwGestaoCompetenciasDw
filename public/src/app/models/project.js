@@ -14,6 +14,10 @@ const ProjectSchema = new mongoose.Schema({
     ref: 'User',
     require: true,
   },
+  team: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  }],
   tasks: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Task',
@@ -23,7 +27,7 @@ const ProjectSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  finishedAt: {
+  endedAt: {
     type: Date,
   },
   objectives: {

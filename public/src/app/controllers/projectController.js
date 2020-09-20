@@ -36,9 +36,9 @@ router.get('/:projectId', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         
-        const { title, description, tasks } = req.body
+      const { title, about, tasks, team, endedAt, objectives} = req.body
 
-        const project = await Project.create({title, description, user: req.userId })
+      const project = await Project.create({ title, about, responsible: req.userId, team, endedAt, objectives})
        
         await Promise.all(tasks.map(async task =>{
             const projectTask = new Task({...task, project: project._id })
@@ -60,12 +60,15 @@ router.post('/', async (req, res) => {
 router.put('/:projectId', async (req, res) => {
   try {
         
-    const { title, description, tasks } = req.body
+    const { title, about, tasks, team, endedAt, objectives } = req.body
 
     const project = await Project.findByIdAndUpdate(req.params.projectId,
-                    { title, 
-                      description
-                    }, { new: true })
+      {title, 
+        about, 
+        tasks, 
+        team, 
+        endedAt,
+         objectives}, { new: true })
    
     project.tasks = []
 
