@@ -1,7 +1,7 @@
 const express = require('express');
 const authMiddleware = require('../middlewares/auth');
 
-const Technology = require('../models/Technology');
+const Technology = require('../models/technology');
 
 const router = express.Router();
 

@@ -13,4 +13,4 @@ let porta = process.env.PORT;
 if (porta == null || porta == "") {
   porta = 3001;
 }
-app.listen(porta);
+app.listen(porta, () => console.log("listen on "+ JSON.stringify(porta)));
