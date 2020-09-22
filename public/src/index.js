@@ -9,8 +9,8 @@ app.use(bodyParser.urlencoded({ extended : false }))
 require('./app/controllers/index')(app)
 
 
-let port = process.env.PORT;
-if (port == null || port == "") {
-  port = 3001;
+let porta = process.env.PORT;
+if (porta == null || porta == "") {
+  porta = 3001;
 }
-app.listen(port);
+app.listen(porta);
