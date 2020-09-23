@@ -3,7 +3,7 @@ const URI_PRODUCAO = "mongodb+srv://outrigger:laboral@cluster0.rda29.gcp.mongodb
 const URI_TESTE = "mongodb+srv://outrigger:laboral@cluster0.rda29.gcp.mongodb.net/teste?retryWrites=true&w=majority"
 
 mongoose.Promise = global.Promise;
-mongoose.connect(URI_TESTE, {
+mongoose.connect(URI_PRODUCAO, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true
