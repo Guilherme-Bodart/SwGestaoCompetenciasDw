@@ -28,6 +28,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         require: true,
         lowercase: true,
+        default:"Estudante"
     },
     isAdmin: {
         type: Boolean,

@@ -22,6 +22,7 @@ const ProjectSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Task',
     require: true,
+    default:[]
   }],
   createdAt: {
     type: Date,
