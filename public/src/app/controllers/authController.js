@@ -14,7 +14,10 @@ function generateToken( params = {} ) {
 
 
 router.post('/register', async (req,res) => {
-    const { email } = req.body
+    var { email } = req.query
+    if (email === undefined){
+       email = req.body.email
+    }
 
     try {
 
@@ -37,15 +40,19 @@ router.post('/register', async (req,res) => {
 })
 
 router.post('/authenticate', async (req,res) => {
-    const { email, password } = req.body;
-  
+    var { email, password } = req.query
+    if (email === undefined && password === undefined){
+       email = req.body.email
+       password = req.body.password
+    }
+
     const user = await User.findOne({ email }).select('+password');
-  
     if (!user)
-      return res.status(400).send({ error: 'Usuário não encontrado' });
+      return res.status(404).send("Usuário não encontrado");
   
     if (!await bcrypt.compare(password, user.password))
-      return res.status(400).send({ error: 'Senha inválida' });
+      return res.status(401).send({ error: 'Senha inválida' });
+    
     
     user.password = undefined
 
@@ -53,6 +60,8 @@ router.post('/authenticate', async (req,res) => {
         user,
         token : generateToken({ id: user.id }),
     });
+    return res.status(200)
+    
   });
 
 
