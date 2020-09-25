@@ -14,18 +14,35 @@ function generateToken( params = {} ) {
 
 
 router.post('/register', async (req,res) => {
-    var { email } = req.query
+    var verif = 0
+    var { email, password, name } = req.query
     if (email === undefined){
        email = req.body.email
+       password = req.body.password
+       name = req.body.name
+       verif = 1
+    }
+    if(email === "" || email === undefined){
+        return res.status(401).send({error: "Campo E-Mail vazio"})
+    }
+    else if(password === "" || password === undefined){
+        return res.status(403).send({error: "Campo Senha vazio"})
+    }
+    else if(name === "" || name === undefined){
+        return res.status(402).send({error: "Campo Nome vazio"})
     }
 
     try {
-
         if (await User.findOne({ email }))
-            return res.status(400).send({error : 'Usuário já existe'})
-
-        const user = await User.create(req.body)
-
+            return res.status(404).send({error : 'Usuário já existe'})
+        var user;
+        if (verif){
+            user = await User.create(req.body)
+        }
+        else{
+            user = await User.create(req.query)
+        }
+        console.log(user)
         user.password = undefined
 
         return res.send({
