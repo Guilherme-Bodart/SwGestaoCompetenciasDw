@@ -42,7 +42,6 @@ router.post('/register', async (req,res) => {
         else{
             user = await User.create(req.query)
         }
-        console.log(user)
         user.password = undefined
 
         return res.send({
@@ -80,6 +79,29 @@ router.post('/authenticate', async (req,res) => {
     return res.status(200)
     
   });
+
+
+router.get('/', async (req, res) => {
+    try {
+
+        const usuarios = await User.find({},{email:1}).sort('email')
+        return res.send({ usuarios })
+
+    } catch (err) {
+        return res.status(400).send({ error: 'Erro em carrega os usuarios'})
+    }
+});
+
+router.get('/:userId', async (req, res) => {
+    try {
+        const usuarios = await User.findById(req.params.userId)
+        return res.send({ usuarios })
+
+    } catch (err) {
+        return res.status(400).send({ error: 'Erro em carrega os usuarios'})
+    }
+});
+
 
 
 module.exports = app => app.use('/auth', router)

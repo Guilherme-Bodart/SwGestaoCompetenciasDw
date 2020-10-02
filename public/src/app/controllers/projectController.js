@@ -11,7 +11,7 @@ router.use(authMiddleware);
 router.get('/', async (req, res) => {
     try {
 
-      const project = await Project.find().populate(['user','tasks']);
+      const project = await Project.find().populate(['tasks']);
 
       return res.send({ project })
 
@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
 router.get('/:projectId', async (req, res) => {
   try {
 
-    const project = await Project.findById(req.params.projectId).populate(['user','tasks']);
+    const project = await Project.findById(req.params.projectId).populate(['tasks']);
 
     return res.send({ project })
 
@@ -35,24 +35,20 @@ router.get('/:projectId', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        
-      const { title, about, tasks, team, endedAt, objectives} = req.body
 
-      const project = await Project.create({ title, about, responsible: req.userId, team, endedAt, objectives})
-       
-        await Promise.all(tasks.map(async task =>{
-            const projectTask = new Task({...task, project: project._id })
-            
-            await projectTask.save()
-            
-            project.tasks.push(projectTask) 
-                 
-        }))
+      const { title, about, tasks, team, endedAt, token} = req.query
+      if (token === undefined || token === '' || title === undefined || about === undefined){
+        title, about, tasks, team, endedAt, token = req.body
+      }
+      console.log(req.query)
+
+      const project = await Project.create({ title, about, responsible: req.userId, team, endedAt})
         
-        await project.save()
-                return res.send({ project })
+      await project.save()
+              return res.send({ project })
 
     } catch (err) {
+      console.log('teste7') 
         return res.status(400).send({ error: 'Erro em criar novo projeto'})
     }
 });
@@ -60,15 +56,17 @@ router.post('/', async (req, res) => {
 router.put('/:projectId', async (req, res) => {
   try {
         
-    const { title, about, tasks, team, endedAt, objectives } = req.body
+    const { title, about, tasks, team, endedAt, token} = req.query
+      if (token === undefined || token === '' || title === undefined || about === undefined){
+        title, about, tasks, team, endedAt, token = req.body
+      }
 
     const project = await Project.findByIdAndUpdate(req.params.projectId,
       {title, 
         about, 
         tasks, 
         team, 
-        endedAt,
-         objectives}, { new: true })
+        endedAt}, { new: true })
    
     project.tasks = []
 
@@ -93,7 +91,12 @@ router.put('/:projectId', async (req, res) => {
 
 router.delete('/:projectId', async (req, res) => {
     try {
+      if(req.params.projectId){
       await Project.findByIdAndDelete(req.params.projectId);
+      }
+      else{
+        await Project.findByIdAndDelete(req.query.projectId);
+      }
   
       return res.send({ })
   

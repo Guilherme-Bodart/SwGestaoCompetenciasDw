@@ -31,9 +31,6 @@ const ProjectSchema = new mongoose.Schema({
   endedAt: {
     type: Date,
   },
-  objectives: {
-    type: String,
-  },
 });
 
 const Project = mongoose.model('Project', ProjectSchema);

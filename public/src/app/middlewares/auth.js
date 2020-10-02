@@ -3,7 +3,13 @@ const authConfig = require('../../config/auth.json')
 
 
 module.exports = (req, res, next) => {
-    const authHeader = req.headers.authorization
+    var authHeader
+    if(req.headers.authorization){
+        authHeader = req.headers.authorization
+    }
+    else {
+        authHeader = req.query.token
+    }
 
     if (!authHeader)
         return res.status(401).send({ error: 'Token não foi informado'})
@@ -22,7 +28,6 @@ module.exports = (req, res, next) => {
         if (err) return res.status(401).send({ error: "Token Inválido"})
 
         req.userId = decoded.id
-
         return next()
     })
 }
