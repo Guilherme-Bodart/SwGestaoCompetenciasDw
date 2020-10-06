@@ -83,7 +83,6 @@ router.post('/authenticate', async (req,res) => {
 
 router.get('/', async (req, res) => {
     try {
-
         const usuarios = await User.find({},{email:1}).sort('email')
         return res.send({ usuarios })
 

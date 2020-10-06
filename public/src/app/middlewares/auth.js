@@ -10,7 +10,6 @@ module.exports = (req, res, next) => {
     else {
         authHeader = req.query.token
     }
-
     if (!authHeader)
         return res.status(401).send({ error: 'Token não foi informado'})
     

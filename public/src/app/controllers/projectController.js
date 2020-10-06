@@ -10,14 +10,22 @@ router.use(authMiddleware);
 
 router.get('/', async (req, res) => {
     try {
-
       const project = await Project.find().populate(['tasks']);
-
       return res.send({ project })
 
     } catch (err) {
       return res.status(400).send({ error: 'Erro em carregar os projetos'})
     }
+});
+
+router.get('/title', async (req, res) => {
+  try {
+      const projetos = await Project.find({},{title:1}).sort('title')
+      return res.send({ projetos })
+
+  } catch (err) {
+      return res.status(400).send({ error: 'Erro em carrega os projetos'})
+  }
 });
 
 router.get('/:projectId', async (req, res) => {
@@ -40,7 +48,6 @@ router.post('/', async (req, res) => {
       if (token === undefined || token === '' || title === undefined || about === undefined){
         title, about, tasks, team, endedAt, token = req.body
       }
-      console.log(req.query)
 
       const project = await Project.create({ title, about, responsible: req.userId, team, endedAt})
         
@@ -48,7 +55,6 @@ router.post('/', async (req, res) => {
               return res.send({ project })
 
     } catch (err) {
-      console.log('teste7') 
         return res.status(400).send({ error: 'Erro em criar novo projeto'})
     }
 });
