@@ -27,12 +27,16 @@ const TaskSchema = new mongoose.Schema({
   finishedAt: {
     type: Date,
   },
-  technology: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Tecnology',
-    require: true, //talvez nem toda tarefa do projeto envolva tecnologia, como a parte de negócio, reuniões e etc
+  frontend:{
+    type:String,
   },
-  description: {
+  backend:{
+    type:String,
+  },
+  banco:{
+    type:String,
+  },
+  about: {
     type: String,
   },
   category: {

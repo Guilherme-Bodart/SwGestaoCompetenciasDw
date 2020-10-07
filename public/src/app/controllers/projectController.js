@@ -60,39 +60,53 @@ router.post('/', async (req, res) => {
 });
 
 router.put('/:projectId', async (req, res) => {
-  try {
-        
-    const { title, about, tasks, team, endedAt, token} = req.query
-      if (token === undefined || token === '' || title === undefined || about === undefined){
-        title, about, tasks, team, endedAt, token = req.body
-      }
+  
+  try{
+    let title, about, team
+    let titleTask, assignedTo, aboutTask, frontend, banco, backend, category, subcategory, finishedAt
+    if(req.body.title===undefined){
+      title = req.query.title
+      about = req.query.about
+      team = req.query.team
+      titleTask = req.query.titleTask
+      assignedTo = req.query.assignedTo
+      aboutTask = req.query.aboutTask
+      frontend = req.query.frontend
+      banco = req.query.banco
+      backend = req.query.backend
+      category = req.query.category
+      subcategory = req.query.subcategory
+      finishedAt = req.query.finishedAt
+    }
+    if (req.query.title===undefined){
+      title = req.body.title
+      about = req.body.about
+      team = req.body.team
+      titleTask = req.body.titleTask
+      assignedTo = req.body.assignedTo
+      aboutTask = req.body.aboutTask
+      frontend = req.body.frontend
+      banco = req.body.banco
+      backend = req.body.backend
+      category = req.body.category
+      subcategory = req.body.subcategory
+      finishedAt = req.body.finishedAt
+    }
+    const task = {title:titleTask, assignedTo, about:aboutTask, frontend,banco,backend,category,subcategory,finishedAt}
 
     const project = await Project.findByIdAndUpdate(req.params.projectId,
-      {title, 
-        about, 
-        tasks, 
-        team, 
-        endedAt}, { new: true })
-   
-    project.tasks = []
+       {title, about, team}, {new: true})
+    const projectTask = await new Task({ ...task, project: project._id})
+    await projectTask.save()
 
-    await Task.remove({ project : project._id })
-
-    await Promise.all(tasks.map(async task =>{
-        const projectTask = new Task({...task, project: project._id })
-        
-        await projectTask.save()
-        
-        project.tasks.push(projectTask) 
-             
-    }))
-    
+    project.tasks.push(projectTask)
     await project.save()
-            return res.send({ project })
 
-} catch (err) {
-    return res.status(400).send({ error: 'Erro em atualizar o projeto'})
-}
+    return res.send({project})
+  }
+  catch(err){
+      return res.status(400).send({error:"Erro em criar novo projeto"})
+  }
 });
 
 router.delete('/:projectId', async (req, res) => {
