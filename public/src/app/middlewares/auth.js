@@ -10,22 +10,24 @@ module.exports = (req, res, next) => {
     else {
         authHeader = req.query.token
     }
-    if (!authHeader)
+    if (!authHeader){
         return res.status(401).send({ error: 'Token não foi informado'})
+    }
     
     const parts = authHeader.split(' ')
 
-    if(!parts.length === 2)
+    if(!parts.length === 2){
         return res.status(401).send({ error: 'Token erro'})
+    }
     
     const [ scheme, token ] = parts
 
-    if (!/^Bearer$/i.test(scheme))
+    if (!/^Bearer$/i.test(scheme)){
         return res.status(401).send({ error: 'Token mal formato'})
+    }
 
     jwt.verify(token, authConfig.secret, (err, decoded) => {
         if (err) return res.status(401).send({ error: "Token Inválido"})
-
         req.userId = decoded.id
         return next()
     })

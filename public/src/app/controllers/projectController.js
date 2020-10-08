@@ -18,6 +18,16 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/tasks', async (req, res) => {
+  try {
+      const tasks = await Task.find().sort('title')
+      return res.send({ tasks })
+
+  } catch (err) {
+      return res.status(400).send({ error: 'Erro em carrega as tarefas'})
+  }
+});
+
 router.get('/title', async (req, res) => {
   try {
       const projetos = await Project.find({},{title:1}).sort('title')
